@@ -26,16 +26,16 @@ export const DisqusThread: React.FC<DisqusThreadProps> = ({
   const canonicalUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
 
   useEffect(() => {
-    // Define global disqus_config callback
-    window.disqus_config = function () {
-      this.page.identifier = identifier;
-      this.page.url = canonicalUrl;
-      this.page.title = title;
-    };
+    try {
+      // Define global disqus_config callback
+      window.disqus_config = function () {
+        this.page.identifier = identifier;
+        this.page.url = canonicalUrl;
+        this.page.title = title;
+      };
 
-    if (window.DISQUS) {
-      // If Disqus is already loaded on the page, reset and reload with the new thread configuration
-      try {
+      if (window.DISQUS) {
+        // If Disqus is already loaded on the page, reset and reload with the new thread configuration
         window.DISQUS.reset({
           reload: true,
           config: function () {
@@ -44,20 +44,22 @@ export const DisqusThread: React.FC<DisqusThreadProps> = ({
             this.page.title = title;
           }
         });
-      } catch (e) {
-        console.warn('Disqus reset error:', e);
+      } else {
+        // If script is not yet in DOM, dynamically inject embed.js with crossorigin anonymous
+        const existingScript = document.getElementById('dsq-embed-scr');
+        if (!existingScript) {
+          const d = document;
+          const s = d.createElement('script');
+          s.id = 'dsq-embed-scr';
+          s.src = `https://${shortname}.disqus.com/embed.js`;
+          s.setAttribute('data-timestamp', String(+new Date()));
+          s.crossOrigin = 'anonymous';
+          s.async = true;
+          (d.head || d.body).appendChild(s);
+        }
       }
-    } else {
-      // If script is not yet in DOM, dynamically inject embed.js
-      const existingScript = document.getElementById('dsq-embed-scr');
-      if (!existingScript) {
-        const d = document;
-        const s = d.createElement('script');
-        s.id = 'dsq-embed-scr';
-        s.src = `https://${shortname}.disqus.com/embed.js`;
-        s.setAttribute('data-timestamp', String(+new Date()));
-        (d.head || d.body).appendChild(s);
-      }
+    } catch (e) {
+      console.warn('Disqus load handled safely:', e);
     }
   }, [identifier, title, canonicalUrl, shortname]);
 
@@ -73,3 +75,4 @@ export const DisqusThread: React.FC<DisqusThreadProps> = ({
     </div>
   );
 };
+
