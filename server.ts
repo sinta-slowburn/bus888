@@ -9,9 +9,9 @@ import {
   handleTrafficIncidents,
   handleTrainServiceAlerts,
   handleLtaStatus
-} from './api/lta';
-import { handleOneMapSearch, handleOneMapRoute } from './api/onemap';
-import { handleWeatherNowcast, handleWeatherRainfall } from './api/weather';
+} from './server/lta';
+import { handleOneMapSearch, handleOneMapRoute } from './server/onemap';
+import { handleWeatherNowcast, handleWeatherRainfall } from './server/weather';
 
 dotenv.config();
 
