@@ -24,6 +24,7 @@ export const SimpleHeader: React.FC<SimpleHeaderProps> = ({
     { id: 'planner', label: 'Map & Routes', icon: 'map' },
     { id: 'buses', label: 'Bus Arrivals', icon: 'directions_bus' },
     { id: 'weather', label: 'Weather Radar', icon: 'cloud' },
+    { id: 'community', label: 'Discussions', icon: 'forum' },
     { id: 'favorites', label: 'Saved', icon: 'star', badge: favoritesCount > 0 ? favoritesCount : undefined },
     { id: 'nearby', label: 'Bus Stops', icon: 'location_on' },
     { id: 'carparks', label: 'Carparks', icon: 'local_parking' },

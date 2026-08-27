@@ -8,6 +8,7 @@ import { FavoritesView } from './components/FavoritesView';
 import { NearbyStopsView } from './components/NearbyStopsView';
 import { CarparksView } from './components/CarparksView';
 import { MrtStatusView } from './components/MrtStatusView';
+import { CommunityDiscussionsView } from './components/CommunityDiscussionsView';
 import { ltaApi } from './services/ltaApi';
 
 const FAVORITES_STORAGE_KEY = 'sg_bus_favorites_v1';
@@ -168,6 +169,10 @@ export default function App() {
 
         {currentTab === 'weather' && (
           <WeatherView />
+        )}
+
+        {currentTab === 'community' && (
+          <CommunityDiscussionsView />
         )}
 
         {currentTab === 'favorites' && (

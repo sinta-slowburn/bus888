@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ThemeMode, BusArrivalInfo, BusStopDetail, FavoriteItem } from '../types';
 import { SINGAPORE_BUS_STOPS, getFallbackArrivals } from '../data/mockData';
 import { ltaApi, mapLtaToBusArrivalInfo } from '../services/ltaApi';
+import { DisqusThread } from './DisqusThread';
 
 interface BusArrivalsViewProps {
   theme: ThemeMode;
@@ -30,6 +31,7 @@ export const BusArrivalsView: React.FC<BusArrivalsViewProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [countdown, setCountdown] = useState<number>(20);
   const [lastRefreshedTime, setLastRefreshedTime] = useState<string>('');
+  const [showDiscussion, setShowDiscussion] = useState<boolean>(false);
 
   // Find stop detail from directory or generate virtual stop
   const currentStopDetail: BusStopDetail = SINGAPORE_BUS_STOPS.find(
@@ -446,6 +448,43 @@ export const BusArrivalsView: React.FC<BusArrivalsViewProps> = ({
               </div>
             );
           })
+        )}
+      </div>
+
+      {/* Commuter Discussion Section for this Bus Stop */}
+      <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-800">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-blue-600 text-[20px]">forum</span>
+              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">
+                Commuter Feedback & Crowd Reports for {currentStopDetail.name} ({activeStopCode})
+              </h3>
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Leave a note for other commuters or report live delays via Disqus.
+            </p>
+          </div>
+
+          <button
+            onClick={() => setShowDiscussion((prev) => !prev)}
+            className="px-3 py-1.5 rounded-xl border border-blue-600/30 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 font-bold text-xs flex items-center gap-1.5 transition"
+          >
+            <span className="material-symbols-outlined text-[16px]">
+              {showDiscussion ? 'expand_less' : 'chat'}
+            </span>
+            <span>{showDiscussion ? 'Hide Discussion' : 'Join Discussion'}</span>
+          </button>
+        </div>
+
+        {showDiscussion && (
+          <div className="mt-4">
+            <DisqusThread
+              shortname="sinta888"
+              identifier={`bus-stop-${activeStopCode}`}
+              title={`Bus Stop ${activeStopCode} - ${currentStopDetail.name} (${currentStopDetail.roadName})`}
+            />
+          </div>
         )}
       </div>
     </div>

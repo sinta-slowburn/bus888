@@ -1,6 +1,6 @@
 export type ThemeMode = 'light' | 'dark';
 
-export type NavTab = 'planner' | 'buses' | 'weather' | 'favorites' | 'nearby' | 'carparks' | 'trains';
+export type NavTab = 'planner' | 'buses' | 'weather' | 'community' | 'favorites' | 'nearby' | 'carparks' | 'trains';
 
 export interface BusArrivalInfo {
   serviceNo: string;
