@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import fs from 'fs';
 import { createServer as createViteServer } from 'vite';
 import dotenv from 'dotenv';
 import {
@@ -16,7 +17,7 @@ dotenv.config();
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT) || 3000;
 
   app.use(express.json());
 
@@ -48,7 +49,15 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), 'dist');
+    // In production, locate the dist directory relative to process.cwd() or compiled __dirname
+    let distPath = path.join(process.cwd(), 'dist');
+    if (!fs.existsSync(path.join(distPath, 'index.html')) && typeof __dirname !== 'undefined') {
+      if (fs.existsSync(path.join(__dirname, 'index.html'))) {
+        distPath = __dirname;
+      } else if (fs.existsSync(path.join(__dirname, '..', 'dist', 'index.html'))) {
+        distPath = path.join(__dirname, '..', 'dist');
+      }
+    }
     app.use(express.static(distPath));
     app.get('*', (_req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
