@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 
 /**
  * Live Singapore 2-Hour Weather Forecast by Planning Area (NEA / data.gov.sg)

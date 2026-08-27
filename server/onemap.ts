@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 
 const getOneMapToken = (): string | undefined => {
   return process.env.ONEMAP_TOKEN || process.env.ONE_MAP_TOKEN;

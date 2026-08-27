@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 
 // Read credential ONLY in api/ directory via process.env
 const getAccountKey = (): string | undefined => {
