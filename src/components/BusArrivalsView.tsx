@@ -32,6 +32,11 @@ export const BusArrivalsView: React.FC<BusArrivalsViewProps> = ({
   const [countdown, setCountdown] = useState<number>(20);
   const [lastRefreshedTime, setLastRefreshedTime] = useState<string>('');
   const [showDiscussion, setShowDiscussion] = useState<boolean>(false);
+  const [stopNotes, setStopNotes] = useState<Array<{ id: string; author: string; text: string; time: string }>>([
+    { id: '1', author: 'Commuter', text: 'Bus shelter is clean and well-lit during late nights.', time: 'Today' }
+  ]);
+  const [newStopNote, setNewStopNote] = useState<string>('');
+  const [stopNoteAuthor, setStopNoteAuthor] = useState<string>('Commuter');
 
   // Find stop detail from directory or generate virtual stop
   const currentStopDetail: BusStopDetail = SINGAPORE_BUS_STOPS.find(
@@ -478,7 +483,82 @@ export const BusArrivalsView: React.FC<BusArrivalsViewProps> = ({
         </div>
 
         {showDiscussion && (
-          <div className="mt-4">
+          <div className="mt-4 space-y-4">
+            {/* Quick Stop Note Input Form */}
+            <div className="bg-slate-50 dark:bg-slate-850 p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+              <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-2 flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-[16px] text-blue-600">edit_note</span>
+                <span>Leave a Quick Note for this Stop</span>
+              </h4>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input
+                  type="text"
+                  value={stopNoteAuthor}
+                  onChange={(e) => setStopNoteAuthor(e.target.value)}
+                  placeholder="Your name"
+                  className="w-full sm:w-36 px-3 py-2 rounded-xl text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100"
+                />
+                <input
+                  type="text"
+                  value={newStopNote}
+                  onChange={(e) => setNewStopNote(e.target.value)}
+                  placeholder="e.g. Bus queue moving fast, rain shelter dry..."
+                  className="flex-1 px-3 py-2 rounded-xl text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && newStopNote.trim()) {
+                      setStopNotes((prev) => [
+                        {
+                          id: String(Date.now()),
+                          author: stopNoteAuthor.trim() || 'Commuter',
+                          text: newStopNote.trim(),
+                          time: 'Just now'
+                        },
+                        ...prev
+                      ]);
+                      setNewStopNote('');
+                    }
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (newStopNote.trim()) {
+                      setStopNotes((prev) => [
+                        {
+                          id: String(Date.now()),
+                          author: stopNoteAuthor.trim() || 'Commuter',
+                          text: newStopNote.trim(),
+                          time: 'Just now'
+                        },
+                        ...prev
+                      ]);
+                      setNewStopNote('');
+                    }
+                  }}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1"
+                >
+                  <span className="material-symbols-outlined text-[14px]">send</span>
+                  <span>Post</span>
+                </button>
+              </div>
+
+              {/* Stop Notes List */}
+              {stopNotes.length > 0 && (
+                <div className="mt-3 space-y-2 pt-3 border-t border-slate-200/60 dark:border-slate-700/60">
+                  {stopNotes.map((note) => (
+                    <div key={note.id} className="bg-white dark:bg-slate-900 p-2.5 rounded-xl text-xs border border-slate-200/50 dark:border-slate-800">
+                      <div className="flex items-center justify-between text-[11px] mb-1">
+                        <span className="font-bold text-slate-800 dark:text-slate-200">{note.author}</span>
+                        <span className="text-slate-400">{note.time}</span>
+                      </div>
+                      <p className="text-slate-600 dark:text-slate-300">{note.text}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Disqus Global Thread for Bus Stop */}
             <DisqusThread
               shortname="sinta888"
               identifier={`bus-stop-${activeStopCode}`}
