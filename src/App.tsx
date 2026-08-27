@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ThemeMode, NavTab, FavoriteItem, BusStopDetail } from './types';
 import { SimpleHeader } from './components/SimpleHeader';
+import { InteractiveMapRoutePlanner } from './components/InteractiveMapRoutePlanner';
 import { BusArrivalsView } from './components/BusArrivalsView';
+import { WeatherView } from './components/WeatherView';
 import { FavoritesView } from './components/FavoritesView';
 import { NearbyStopsView } from './components/NearbyStopsView';
 import { CarparksView } from './components/CarparksView';
@@ -17,7 +19,7 @@ export default function App() {
     return saved === 'light' ? 'light' : 'dark';
   });
 
-  const [currentTab, setCurrentTab] = useState<NavTab>('buses');
+  const [currentTab, setCurrentTab] = useState<NavTab>('planner');
   const [activeStopCode, setActiveStopCode] = useState<string>('83139');
   const [isBackendConnected, setIsBackendConnected] = useState<boolean>(true);
 
@@ -29,7 +31,6 @@ export default function App() {
     } catch {
       // ignore
     }
-    // Default helpful starter favorites
     return [
       {
         id: '83139',
@@ -131,7 +132,7 @@ export default function App() {
 
   return (
     <div
-      id="sg-bus-app"
+      id="sg-transit-app"
       className={`min-h-screen flex flex-col transition-colors duration-200 ${
         theme === 'dark' ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'
       }`}
@@ -147,7 +148,13 @@ export default function App() {
       />
 
       {/* Main View Container */}
-      <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-6">
+        {currentTab === 'planner' && (
+          <InteractiveMapRoutePlanner
+            onSelectBusStop={handleSelectStopCode}
+          />
+        )}
+
         {currentTab === 'buses' && (
           <BusArrivalsView
             theme={theme}
@@ -157,6 +164,10 @@ export default function App() {
             onToggleFavoriteStop={handleToggleFavoriteStop}
             onToggleFavoriteService={handleToggleFavoriteService}
           />
+        )}
+
+        {currentTab === 'weather' && (
+          <WeatherView />
         )}
 
         {currentTab === 'favorites' && (
@@ -189,24 +200,24 @@ export default function App() {
         )}
       </main>
 
-      {/* Simple, Timeless Footer */}
+      {/* Modern Commuter Footer */}
       <footer
-        className={`w-full border-t py-6 text-center text-xs transition-colors mt-auto ${
+        className={`w-full border-t py-5 text-center text-xs transition-colors mt-auto ${
           theme === 'dark'
             ? 'border-slate-900 bg-slate-950 text-slate-500'
             : 'border-slate-200 bg-white text-slate-400'
         }`}
       >
-        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-2 font-medium">
-            <span>SG BUS</span>
+            <span>SG Transit Hub</span>
             <span>•</span>
-            <span>Real-time public transport companion for Singapore commuters</span>
+            <span>Google Maps-style directions & weather radar</span>
           </div>
           <div className="flex items-center gap-3">
-            <span>Powered by LTA DataMall</span>
+            <span>Singapore OneMap (SLA)</span>
             <span>•</span>
-            <span>Auto-refresh 20s</span>
+            <span>LTA DataMall & NEA Telemetry</span>
           </div>
         </div>
       </footer>

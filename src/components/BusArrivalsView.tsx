@@ -38,6 +38,8 @@ export const BusArrivalsView: React.FC<BusArrivalsViewProps> = ({
     code: activeStopCode,
     name: `Bus Stop ${activeStopCode}`,
     roadName: 'Singapore Transit Network',
+    lat: 1.3521,
+    lng: 103.8198,
     services: []
   };
 

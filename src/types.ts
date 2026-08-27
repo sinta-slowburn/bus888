@@ -1,6 +1,6 @@
 export type ThemeMode = 'light' | 'dark';
 
-export type NavTab = 'buses' | 'favorites' | 'nearby' | 'carparks' | 'trains';
+export type NavTab = 'planner' | 'buses' | 'weather' | 'favorites' | 'nearby' | 'carparks' | 'trains';
 
 export interface BusArrivalInfo {
   serviceNo: string;
@@ -40,8 +40,8 @@ export interface BusStopDetail {
   name: string;
   roadName: string;
   district?: string;
-  lat?: number;
-  lng?: number;
+  lat: number;
+  lng: number;
   services: string[];
 }
 
@@ -66,3 +66,55 @@ export interface MrtLineStatus {
   direction?: string;
 }
 
+export interface RouteTransitStep {
+  id: string;
+  instruction: string;
+  detail?: string;
+  distanceDisplay: string;
+  durationMinutes: number;
+  mode: 'walk' | 'mrt' | 'bus' | 'drive';
+  icon: string;
+  lineBadge?: string;
+  lineColor?: string;
+  stopsCount?: number;
+  departureTime?: string;
+  arrivalTime?: string;
+}
+
+export interface TransitRouteOption {
+  id: string;
+  title: string;
+  viaSummary: string;
+  durationMinutes: number;
+  distanceKm: number;
+  departureTime: string;
+  arrivalTime: string;
+  fare: string;
+  isFastest?: boolean;
+  isRecommended?: boolean;
+  steps: RouteTransitStep[];
+  polyline: [number, number][]; // [lat, lng]
+  weatherNotice?: string;
+}
+
+export interface WeatherAreaForecast {
+  area: string;
+  forecast: string; // e.g. "Passing Showers", "Partly Cloudy", "Fair (Day)"
+  icon: string;
+}
+
+export interface WeatherSummary {
+  updateTimestamp: string;
+  forecasts: WeatherAreaForecast[];
+  temperatureRange?: string;
+  rainAdvisory?: string;
+}
+
+export interface LocationSearchResult {
+  name: string;
+  address: string;
+  lat: number;
+  lng: number;
+  type: 'bus-stop' | 'mrt' | 'landmark' | 'address';
+  code?: string;
+}

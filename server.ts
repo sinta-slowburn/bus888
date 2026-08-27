@@ -9,6 +9,8 @@ import {
   handleTrainServiceAlerts,
   handleLtaStatus
 } from './api/lta';
+import { handleOneMapSearch, handleOneMapRoute } from './api/onemap';
+import { handleWeatherNowcast, handleWeatherRainfall } from './api/weather';
 
 dotenv.config();
 
@@ -24,6 +26,14 @@ async function startServer() {
   app.get('/api/lta/carparks', handleCarParkAvailability);
   app.get('/api/lta/traffic-incidents', handleTrafficIncidents);
   app.get('/api/lta/train-alerts', handleTrainServiceAlerts);
+
+  // OneMap SLA API routes
+  app.get('/api/onemap/search', handleOneMapSearch);
+  app.get('/api/onemap/route', handleOneMapRoute);
+
+  // Singapore Weather API routes (NEA / data.gov.sg)
+  app.get('/api/weather/nowcast', handleWeatherNowcast);
+  app.get('/api/weather/rainfall', handleWeatherRainfall);
 
   // Healthcheck endpoint
   app.get('/api/health', (_req, res) => {

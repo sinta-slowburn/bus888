@@ -21,10 +21,12 @@ export const SimpleHeader: React.FC<SimpleHeaderProps> = ({
   const isDark = theme === 'dark';
 
   const navItems: { id: NavTab; label: string; icon: string; badge?: number | string }[] = [
+    { id: 'planner', label: 'Map & Routes', icon: 'map' },
     { id: 'buses', label: 'Bus Arrivals', icon: 'directions_bus' },
+    { id: 'weather', label: 'Weather Radar', icon: 'cloud' },
     { id: 'favorites', label: 'Saved', icon: 'star', badge: favoritesCount > 0 ? favoritesCount : undefined },
     { id: 'nearby', label: 'Bus Stops', icon: 'location_on' },
-    { id: 'carparks', label: 'Carpark Lots', icon: 'local_parking' },
+    { id: 'carparks', label: 'Carparks', icon: 'local_parking' },
     { id: 'trains', label: 'MRT Status', icon: 'train' }
   ];
 
@@ -37,40 +39,40 @@ export const SimpleHeader: React.FC<SimpleHeaderProps> = ({
           : 'bg-white/95 border-slate-200 text-slate-900 shadow-xs'
       }`}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6">
         <div className="flex items-center justify-between h-16">
           {/* App Brand */}
           <div
-            onClick={() => onTabChange('buses')}
-            className="flex items-center gap-3 cursor-pointer select-none group"
+            onClick={() => onTabChange('planner')}
+            className="flex items-center gap-2.5 cursor-pointer select-none group"
           >
-            <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-              <span className="material-symbols-outlined text-[24px]">directions_bus</span>
+            <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+              <span className="material-symbols-outlined text-[22px]">explore</span>
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-lg tracking-tight">SG BUS</span>
-                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                  LIVE
+              <div className="flex items-center gap-1.5">
+                <span className="font-extrabold text-lg tracking-tight">SG TRANSIT</span>
+                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                  MAP & LIVE
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                Singapore Bus Arrivals & Transit
+                Singapore OneMap • LTA Live • Weather
               </p>
             </div>
           </div>
 
           {/* Center Navigation Tabs (Desktop) */}
-          <nav className="hidden md:flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-1 rounded-xl border border-slate-200 dark:border-slate-800">
+          <nav className="hidden lg:flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-1 rounded-xl border border-slate-200 dark:border-slate-800">
             {navItems.map((item) => {
               const isActive = currentTab === item.id;
               return (
                 <button
                   key={item.id}
                   onClick={() => onTabChange(item.id)}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
                     isActive
-                      ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs font-bold'
+                      ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-xs font-bold'
                       : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
@@ -80,7 +82,7 @@ export const SimpleHeader: React.FC<SimpleHeaderProps> = ({
                     <span
                       className={`text-[10px] font-bold px-1.5 py-0.2 rounded-full ${
                         isActive
-                          ? 'bg-emerald-600 text-white'
+                          ? 'bg-blue-600 text-white'
                           : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
                       }`}
                     >
@@ -93,13 +95,13 @@ export const SimpleHeader: React.FC<SimpleHeaderProps> = ({
           </nav>
 
           {/* Right Controls: LTA Status + Theme Toggle */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2">
             <div
-              title={isBackendConnected ? 'Connected to LTA DataMall v3 API' : 'LTA DataMall active'}
+              title={isBackendConnected ? 'Connected to LTA & OneMap APIs' : 'Live Sync active'}
               className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
             >
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>20s Sync</span>
+              <span>Live Sync</span>
             </div>
 
             <button
@@ -118,8 +120,8 @@ export const SimpleHeader: React.FC<SimpleHeaderProps> = ({
           </div>
         </div>
 
-        {/* Mobile Navigation Tabs */}
-        <div className="flex md:hidden items-center justify-between py-2 border-t border-slate-200 dark:border-slate-800 overflow-x-auto gap-1">
+        {/* Mobile / Tablet Navigation Tabs */}
+        <div className="flex lg:hidden items-center justify-start py-2 border-t border-slate-200 dark:border-slate-800 overflow-x-auto gap-1 no-scrollbar">
           {navItems.map((item) => {
             const isActive = currentTab === item.id;
             return (
@@ -128,7 +130,7 @@ export const SimpleHeader: React.FC<SimpleHeaderProps> = ({
                 onClick={() => onTabChange(item.id)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1 shrink-0 ${
                   isActive
-                    ? 'bg-emerald-600 text-white font-bold'
+                    ? 'bg-blue-600 text-white font-bold'
                     : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900'
                 }`}
               >
@@ -137,7 +139,7 @@ export const SimpleHeader: React.FC<SimpleHeaderProps> = ({
                 {item.badge !== undefined && (
                   <span
                     className={`text-[9px] px-1 rounded-full ${
-                      isActive ? 'bg-white text-emerald-800 font-bold' : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
+                      isActive ? 'bg-white text-blue-800 font-bold' : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
                     }`}
                   >
                     {item.badge}
